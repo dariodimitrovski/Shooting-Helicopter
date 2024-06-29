@@ -45,7 +45,6 @@
             // 
             // pillar1
             // 
-            this.pillar1.Image = global::Shooting_Helicopter.Properties.Resources.pillar;
             this.pillar1.Location = new System.Drawing.Point(518, 0);
             this.pillar1.Name = "pillar1";
             this.pillar1.Size = new System.Drawing.Size(59, 172);
@@ -57,7 +56,6 @@
             // 
             // pillar2
             // 
-            this.pillar2.Image = global::Shooting_Helicopter.Properties.Resources.pillar;
             this.pillar2.Location = new System.Drawing.Point(253, 240);
             this.pillar2.Name = "pillar2";
             this.pillar2.Size = new System.Drawing.Size(60, 211);
@@ -71,14 +69,14 @@
             this.helicopter.Location = new System.Drawing.Point(62, 104);
             this.helicopter.Name = "helicopter";
             this.helicopter.Size = new System.Drawing.Size(100, 54);
-            this.helicopter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.helicopter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.helicopter.TabIndex = 2;
             this.helicopter.TabStop = false;
             this.helicopter.Tag = "helicopter";
+            this.helicopter.Click += new System.EventHandler(this.helicopter_Click);
             // 
             // ufo
             // 
-            this.ufo.Image = global::Shooting_Helicopter.Properties.Resources.alien1;
             this.ufo.Location = new System.Drawing.Point(705, 198);
             this.ufo.Name = "ufo";
             this.ufo.Size = new System.Drawing.Size(68, 72);
@@ -126,8 +124,8 @@
             this.Controls.Add(this.pillar1);
             this.Name = "Form1";
             this.Text = "Helicopter Shooting Game";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyDown);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.KeyUp);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             ((System.ComponentModel.ISupportInitialize)(this.pillar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pillar2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.helicopter)).EndInit();

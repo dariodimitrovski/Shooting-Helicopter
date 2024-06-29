@@ -90,7 +90,7 @@
     <None Include="Resources\alien3.gif" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Helicopter.gif" />
+    <None Include="Resources\Halicopter.gif" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\pillar.gif" />

@@ -39,43 +39,6 @@ namespace Shooting_Helicopter
 
         }
 
-        private void KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Up)
-            {
-                goUp = true;
-            }
-            if (e.KeyCode == Keys.Down)
-            {
-                goDown = true;
-            }
-            if (e.KeyCode == Keys.Space && shot == false)
-            {
-                MakeBullet();
-                shot = true;
-            }
-        }
-
-        private void KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Up)
-            {
-                goUp = false;
-            }
-            if (e.KeyCode == Keys.Down)
-            {
-                goDown = false;
-            }
-            if (shot == true)
-            {
-                shot = false;
-            }
-            if (e.KeyCode == Keys.Enter && gameOver == true)
-            {
-                RestartGame();
-            }
-        }
-
         private void RestartGame()
         {
             goUp = false;
@@ -124,6 +87,48 @@ namespace Shooting_Helicopter
         }
 
         private void ChangeUFO()
+        {
+
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Up)
+            {
+                goUp = true;
+            }
+            if (e.KeyCode == Keys.Down)
+            {
+                goDown = true;
+            }
+            if (e.KeyCode == Keys.Space && shot == false)
+            {
+                MakeBullet();
+                shot = true;
+            }
+        }
+
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Up)
+            {
+                goUp = false;
+            }
+            if (e.KeyCode == Keys.Down)
+            {
+                goDown = false;
+            }
+            if (shot == true)
+            {
+                shot = false;
+            }
+            if (e.KeyCode == Keys.Enter && gameOver == true)
+            {
+                RestartGame();
+            }
+        }
+
+        private void helicopter_Click(object sender, EventArgs e)
         {
 
         }
