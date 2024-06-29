@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.pillar1 = new System.Windows.Forms.PictureBox();
             this.pillar2 = new System.Windows.Forms.PictureBox();
             this.helicopter = new System.Windows.Forms.PictureBox();
@@ -45,6 +46,7 @@
             // 
             // pillar1
             // 
+            this.pillar1.Image = ((System.Drawing.Image)(resources.GetObject("pillar1.Image")));
             this.pillar1.Location = new System.Drawing.Point(518, 0);
             this.pillar1.Name = "pillar1";
             this.pillar1.Size = new System.Drawing.Size(59, 172);
@@ -56,6 +58,7 @@
             // 
             // pillar2
             // 
+            this.pillar2.Image = ((System.Drawing.Image)(resources.GetObject("pillar2.Image")));
             this.pillar2.Location = new System.Drawing.Point(253, 240);
             this.pillar2.Name = "pillar2";
             this.pillar2.Size = new System.Drawing.Size(60, 211);
@@ -66,6 +69,9 @@
             // 
             // helicopter
             // 
+            this.helicopter.Image = ((System.Drawing.Image)(resources.GetObject("helicopter.Image")));
+            this.helicopter.ImageLocation = "";
+            this.helicopter.InitialImage = null;
             this.helicopter.Location = new System.Drawing.Point(62, 104);
             this.helicopter.Name = "helicopter";
             this.helicopter.Size = new System.Drawing.Size(100, 54);
@@ -77,6 +83,7 @@
             // 
             // ufo
             // 
+            this.ufo.Image = ((System.Drawing.Image)(resources.GetObject("ufo.Image")));
             this.ufo.Location = new System.Drawing.Point(705, 198);
             this.ufo.Name = "ufo";
             this.ufo.Size = new System.Drawing.Size(68, 72);
