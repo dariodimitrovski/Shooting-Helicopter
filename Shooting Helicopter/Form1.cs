@@ -36,7 +36,68 @@ namespace Shooting_Helicopter
 
         private void MainTimerEvent(object sender, EventArgs e)
         {
+            txtScore.Text = "Score: " + score;
 
+            if (goUp == true && helicopter.Top > 0)
+            {
+                helicopter.Top -= playerSpeed;
+            }
+            if (goDown == true && helicopter.Top + helicopter.Height < this.ClientSize.Height)
+            {
+                helicopter.Top += playerSpeed;
+            }
+
+            ufo.Left -= UFOSpeed;
+
+            if (ufo.Left + ufo.Width < 0)
+            {
+                ChangeUFO();
+            }
+
+            foreach (Control x in this.Controls)
+            {
+                if (x is PictureBox && (string)x.Tag == "pillar")
+                {
+                    x.Left -= speed;
+
+                    if (x.Left <= -200)
+                    {
+                        x.Left = 1000;
+                    }
+
+                    if (helicopter.Bounds.IntersectsWith(x.Bounds))
+                    {
+                        GameOver();
+                    }
+                }
+
+                if (x is PictureBox && (string)x.Tag == "bullet")
+                {
+                    x.Left += 25;
+                    if (x.Left > 800)
+                    {
+                        RemoveBullet(((PictureBox)x));
+                    }
+
+                    if (ufo.Bounds.IntersectsWith(x.Bounds))
+                    {
+                        RemoveBullet(((PictureBox)x));
+                        score += 1;
+                        ChangeUFO();
+                    }
+                }
+            }
+
+            if (helicopter.Bounds.IntersectsWith(ufo.Bounds))
+            {
+                GameOver();
+            }
+
+            if (score > 10)
+            {
+                speed = 12;
+                UFOSpeed = 18;
+            }
         }
 
         private void RestartGame()
@@ -53,12 +114,16 @@ namespace Shooting_Helicopter
             ChangeUFO();
 
             helicopter.Top = 62;
-            pillar1.Left = 518;
+            pillar1.Left = 600;
             pillar2.Left = 253;
+
+            /*helicopter.Top = 62;
+            pillar1.Left = 608;
+            pillar2.Left = 315;*/
 
             GameTimer.Start();
         }
-        
+
         private void GameOver()
         {
             GameTimer.Stop();
@@ -88,6 +153,37 @@ namespace Shooting_Helicopter
 
         private void ChangeUFO()
         {
+            if (index > 3)
+            {
+                index = 1;
+            }
+            else
+            {
+                index += 1;
+            }
+
+            if (index == 1)
+            {
+                ufo.Image = Properties.Resources.alien1;
+            }
+            else if (index == 2)
+            {
+                ufo.Image = Properties.Resources.alien2;
+            }
+            else if (index == 3)
+            {
+                ufo.Image = Properties.Resources.alien3;
+            }
+
+            ufo.Left = 1000;
+            ufo.Top = random.Next(20, this.ClientSize.Height - ufo.Height);
+
+            /*switch(index)
+            {
+                case 1: ufo.Image = Properties.Resources.alien1; break;
+                case 2: ufo.Image = Properties.Resources.alien2; break;
+                case 3: ufo.Image = Properties.Resources.alien3; break;
+            }*/
 
         }
 
@@ -129,6 +225,11 @@ namespace Shooting_Helicopter
         }
 
         private void helicopter_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pillar1_Click(object sender, EventArgs e)
         {
 
         }
