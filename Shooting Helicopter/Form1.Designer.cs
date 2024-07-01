@@ -35,32 +35,29 @@
             this.ufo = new System.Windows.Forms.PictureBox();
             this.GameTimer = new System.Windows.Forms.Timer(this.components);
             this.txtScore = new System.Windows.Forms.Label();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pillar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pillar2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.helicopter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ufo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
             // pillar1
             // 
             this.pillar1.Image = global::Shooting_Helicopter.Properties.Resources.pillar;
             this.pillar1.Location = new System.Drawing.Point(691, 0);
-            this.pillar1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pillar1.Margin = new System.Windows.Forms.Padding(4);
             this.pillar1.Name = "pillar1";
             this.pillar1.Size = new System.Drawing.Size(79, 212);
             this.pillar1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pillar1.TabIndex = 0;
             this.pillar1.TabStop = false;
             this.pillar1.Tag = "pillar";
-            this.pillar1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // pillar2
             // 
             this.pillar2.Image = global::Shooting_Helicopter.Properties.Resources.pillar;
             this.pillar2.Location = new System.Drawing.Point(337, 295);
-            this.pillar2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pillar2.Margin = new System.Windows.Forms.Padding(4);
             this.pillar2.Name = "pillar2";
             this.pillar2.Size = new System.Drawing.Size(80, 260);
             this.pillar2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -74,20 +71,19 @@
             this.helicopter.ImageLocation = "";
             this.helicopter.InitialImage = null;
             this.helicopter.Location = new System.Drawing.Point(83, 128);
-            this.helicopter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.helicopter.Margin = new System.Windows.Forms.Padding(4);
             this.helicopter.Name = "helicopter";
             this.helicopter.Size = new System.Drawing.Size(133, 66);
             this.helicopter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.helicopter.TabIndex = 2;
             this.helicopter.TabStop = false;
             this.helicopter.Tag = "helicopter";
-            this.helicopter.Click += new System.EventHandler(this.helicopter_Click);
             // 
             // ufo
             // 
             this.ufo.Image = global::Shooting_Helicopter.Properties.Resources.alien1;
             this.ufo.Location = new System.Drawing.Point(940, 244);
-            this.ufo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ufo.Margin = new System.Windows.Forms.Padding(4);
             this.ufo.Name = "ufo";
             this.ufo.Size = new System.Drawing.Size(68, 72);
             this.ufo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -112,16 +108,6 @@
             this.txtScore.TabIndex = 4;
             this.txtScore.Text = "Score: 0";
             // 
-            // pictureBox3
-            // 
-            this.pictureBox3.Location = new System.Drawing.Point(62, 104);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(100, 54);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox3.TabIndex = 2;
-            this.pictureBox3.TabStop = false;
-            this.pictureBox3.Tag = "helicopter";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -133,7 +119,7 @@
             this.Controls.Add(this.helicopter);
             this.Controls.Add(this.pillar2);
             this.Controls.Add(this.pillar1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Helicopter Shooting Game";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
@@ -142,7 +128,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pillar2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.helicopter)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ufo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -156,7 +141,5 @@
         private System.Windows.Forms.PictureBox ufo;
         private System.Windows.Forms.Timer GameTimer;
         private System.Windows.Forms.Label txtScore;
-        private System.Windows.Forms.PictureBox pictureBox3;
     }
 }
-
