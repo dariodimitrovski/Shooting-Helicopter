@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -23,80 +24,84 @@ namespace Shooting_Helicopter
         public int score { get; set; } = 0;
 
         Random random = new Random();
+        Random colorRandom = new Random();
+
+        private int highScore = 0;
+        public int Health { get; set; } = 3;
+
+        private bool paused = false; // Flag to track if the game is paused
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void MainTimerEvent(object sender, EventArgs e)
         {
-            txtScore.Text = "Score: " + score;
-
-            if (goUp == true && helicopter.Top > 0)
+            if (!paused) // Check if the game is not paused
             {
-                helicopter.Top -= playerSpeed;
-            }
-            if (goDown == true && helicopter.Top + helicopter.Height < this.ClientSize.Height)
-            {
-                helicopter.Top += playerSpeed;
-            }
+                txtScore.Text = "Score: " + score + " Health: " + Health;
 
-            ufo.Left -= UFOSpeed;
-
-            if (ufo.Left + ufo.Width < 0)
-            {
-                ChangeUFO();
-            }
-
-            foreach (Control x in this.Controls)
-            {
-                if (x is PictureBox && (string)x.Tag == "pillar")
+                if (goUp && helicopter.Top > 0)
                 {
-                    x.Left -= speed;
+                    helicopter.Top -= playerSpeed;
+                }
+                if (goDown && helicopter.Top + helicopter.Height < ClientSize.Height)
+                {
+                    helicopter.Top += playerSpeed;
+                }
 
-                    if (x.Left <= -200)
+                ufo.Left -= UFOSpeed;
+
+                if (ufo.Left + ufo.Width < 0)
+                {
+                    ChangeUFO();
+                }
+
+                foreach (Control x in Controls)
+                {
+                    if (x is PictureBox && (string)x.Tag == "pillar")
                     {
-                        x.Left = 1000;
+                        x.Left -= speed;
+
+                        if (x.Left <= -200)
+                        {
+                            x.Left = 1000;
+                        }
+
+                        if (helicopter.Bounds.IntersectsWith(x.Bounds))
+                        {
+                            DecreaseHealth();
+                        }
                     }
 
-                    if (helicopter.Bounds.IntersectsWith(x.Bounds))
+                    if (x is PictureBox && (string)x.Tag == "bullet")
                     {
-                        GameOver();
+                        x.Left += 25;
+                        if (x.Left > 800)
+                        {
+                            RemoveBullet((PictureBox)x);
+                        }
+
+                        if (ufo.Bounds.IntersectsWith(x.Bounds))
+                        {
+                            RemoveBullet((PictureBox)x);
+                            score += 1;
+                            ChangeUFO();
+                        }
                     }
                 }
 
-                if (x is PictureBox && (string)x.Tag == "bullet")
+                if (helicopter.Bounds.IntersectsWith(ufo.Bounds))
                 {
-                    x.Left += 25;
-                    if (x.Left > 800)
-                    {
-                        RemoveBullet(((PictureBox)x));
-                    }
-
-                    if (ufo.Bounds.IntersectsWith(x.Bounds))
-                    {
-                        RemoveBullet(((PictureBox)x));
-                        score += 1;
-                        ChangeUFO();
-                    }
+                    DecreaseHealth();
                 }
-            }
 
-            if (helicopter.Bounds.IntersectsWith(ufo.Bounds))
-            {
-                GameOver();
-            }
-
-            if (score > 10)
-            {
-                speed = 12;
-                UFOSpeed = 18;
+                if (score > 10)
+                {
+                    speed = 12;
+                    UFOSpeed = 18;
+                }
             }
         }
 
@@ -109,17 +114,14 @@ namespace Shooting_Helicopter
             score = 0;
             speed = 8;
             UFOSpeed = 10;
-            txtScore.Text = "Score: " + score;
+            Health = 3;
+            txtScore.Text = "Score: " + score + " Health: " + Health;
 
             ChangeUFO();
 
             helicopter.Top = 62;
             pillar1.Left = 600;
             pillar2.Left = 253;
-
-            /*helicopter.Top = 62;
-            pillar1.Left = 608;
-            pillar2.Left = 315;*/
 
             GameTimer.Start();
         }
@@ -129,26 +131,54 @@ namespace Shooting_Helicopter
             GameTimer.Stop();
             txtScore.Text = "Score: " + score + "  Game over, press enter to retry!";
             gameOver = true;
+
+            if (score > highScore)
+            {
+                highScore = score;
+                MessageBox.Show("New High Score: " + highScore);
+            }
+        }
+
+        private void DecreaseHealth()
+        {
+            Health--;
+
+            if (Health <= 0)
+            {
+                GameOver();
+            }
+            else
+            {
+                helicopter.Top = 62;
+                pillar1.Left = 600;
+                pillar2.Left = 253;
+                ChangeUFO();
+            }
         }
 
         private void RemoveBullet(PictureBox bullet)
         {
-            this.Controls.Remove(bullet);
+            Controls.Remove(bullet);
             bullet.Dispose();
         }
 
         private void MakeBullet()
         {
-            PictureBox bullet = new PictureBox();
-            bullet.BackColor = Color.Maroon;
+            PictureBox bullet = new PictureBox
+            {
+                BackColor = Color.Maroon,
+                Height = 5,
+                Width = 10,
+                Left = helicopter.Left + helicopter.Width,
+                Top = helicopter.Top + helicopter.Height / 2,
+                Tag = "bullet"
+            };
 
-            bullet.Height = 5;
-            bullet.Width = 10;
-            bullet.Left = helicopter.Left + helicopter.Width;
-            bullet.Top = helicopter.Top + helicopter.Height / 2;
-            bullet.Tag = "bullet";
+            Controls.Add(bullet);
 
-            this.Controls.Add(bullet);
+            // Change background color when shooting
+            BackColor = Color.FromArgb(colorRandom.Next(256),
+                colorRandom.Next(256), colorRandom.Next(256));
         }
 
         private void ChangeUFO()
@@ -162,29 +192,21 @@ namespace Shooting_Helicopter
                 index += 1;
             }
 
-            if (index == 1)
+            switch (index)
             {
-                ufo.Image = Properties.Resources.alien1;
-            }
-            else if (index == 2)
-            {
-                ufo.Image = Properties.Resources.alien2;
-            }
-            else if (index == 3)
-            {
-                ufo.Image = Properties.Resources.alien3;
+                case 1:
+                    ufo.Image = Properties.Resources.alien1;
+                    break;
+                case 2:
+                    ufo.Image = Properties.Resources.alien2;
+                    break;
+                case 3:
+                    ufo.Image = Properties.Resources.alien3;
+                    break;
             }
 
             ufo.Left = 1000;
-            ufo.Top = random.Next(20, this.ClientSize.Height - ufo.Height);
-
-            /*switch(index)
-            {
-                case 1: ufo.Image = Properties.Resources.alien1; break;
-                case 2: ufo.Image = Properties.Resources.alien2; break;
-                case 3: ufo.Image = Properties.Resources.alien3; break;
-            }*/
-
+            ufo.Top = random.Next(20, ClientSize.Height - ufo.Height);
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -197,10 +219,21 @@ namespace Shooting_Helicopter
             {
                 goDown = true;
             }
-            if (e.KeyCode == Keys.Space && shot == false)
+            if (e.KeyCode == Keys.Space && !shot)
             {
                 MakeBullet();
                 shot = true;
+            }
+            if (e.KeyCode == Keys.P) // Pause the game when 'P' is pressed
+            {
+                if (paused)
+                {
+                    ResumeGame();
+                }
+                else
+                {
+                    PauseGame();
+                }
             }
         }
 
@@ -214,24 +247,28 @@ namespace Shooting_Helicopter
             {
                 goDown = false;
             }
-            if (shot == true)
+            if (e.KeyCode == Keys.Space)
             {
                 shot = false;
             }
-            if (e.KeyCode == Keys.Enter && gameOver == true)
+            if (e.KeyCode == Keys.Enter && gameOver)
             {
                 RestartGame();
             }
         }
 
-        private void helicopter_Click(object sender, EventArgs e)
+        private void PauseGame()
         {
-
+            paused = true;
+            GameTimer.Stop();
+            txtScore.Text = "Game Paused. Press 'P' to resume.";
         }
 
-        private void pillar1_Click(object sender, EventArgs e)
+        private void ResumeGame()
         {
-
+            paused = false;
+            GameTimer.Start();
+            txtScore.Text = "Score: " + score + " Health: " + Health;
         }
     }
 }
