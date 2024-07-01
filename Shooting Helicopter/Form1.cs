@@ -1,47 +1,94 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Media;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Shooting_Helicopter
 {
     public partial class Form1 : Form
     {
-        public bool goUp { get; set; }
-        public bool goDown { get; set; }
-        public bool shot { get; set; }
-        public bool gameOver { get; set; }
-        public int playerSpeed { get; set; } = 7;
-        public int index { get; set; } = 0;
-        public int speed { get; set; } = 8;
-        public int UFOSpeed { get; set; } = 10;
-        public int score { get; set; } = 0;
+        private int playerSpeed;
+        private int speed;
+        private int UFOSpeed;
+        private int score;
+        private int highScore;
+        private int index;
+        private int Health;
+
+        private bool goUp;
+        private bool goDown;
+        private bool shot;
+        private bool gameOver;
+        private bool paused;
 
         Random random = new Random();
         Random colorRandom = new Random();
 
-        private int highScore = 0;
-        public int Health { get; set; } = 3;
-
-        private bool paused = false; // Flag to track if the game is paused
+        private DifficultyForm difficultyForm; 
 
         public Form1()
         {
             InitializeComponent();
+            StartGameWithDifficultySelection();
+        }
+
+        private void StartGameWithDifficultySelection()
+        {
+            difficultyForm = new DifficultyForm();
+
+            DialogResult result = difficultyForm.ShowDialog();
+
+            if (result == DialogResult.OK && !string.IsNullOrEmpty(difficultyForm.SelectedDifficulty))
+            {
+                InitializeGame(difficultyForm.SelectedDifficulty);
+            }
+            else
+            {
+                InitializeGame("Easy");
+            }
+        }
+
+        private void InitializeGame(string difficulty)
+        {
+            switch (difficulty)
+            {
+                case "Easy":
+                    playerSpeed = 5;
+                    speed = 5;
+                    UFOSpeed = 10;
+                    break;
+                case "Medium":
+                    playerSpeed = 10;
+                    speed = 10;
+                    UFOSpeed = 15;
+                    break;
+                case "Hard":
+                    playerSpeed = 15;
+                    speed = 15;
+                    UFOSpeed = 20;
+                    break;
+                default:
+                    playerSpeed = 5; 
+                    speed = 5;
+                    UFOSpeed = 10;
+                    break;
+            }
+
+            score = 0;
+            highScore = 0;
+            index = 0;
+            Health = 3;
+
+            txtScore.Text = "Score: " + score + " Health: " + Health;
+
+            GameTimer.Start();
         }
 
         private void MainTimerEvent(object sender, EventArgs e)
         {
-            if (!paused) // Check if the game is not paused
-            {
-                txtScore.Text = "Score: " + score + " Health: " + Health;
+            txtScore.Text = "Score: " + score + " Health: " + Health;
 
+            if (!paused) 
+            {
                 if (goUp && helicopter.Top > 0)
                 {
                     helicopter.Top -= playerSpeed;
@@ -176,7 +223,6 @@ namespace Shooting_Helicopter
 
             Controls.Add(bullet);
 
-            // Change background color when shooting
             BackColor = Color.FromArgb(colorRandom.Next(256),
                 colorRandom.Next(256), colorRandom.Next(256));
         }
@@ -224,7 +270,7 @@ namespace Shooting_Helicopter
                 MakeBullet();
                 shot = true;
             }
-            if (e.KeyCode == Keys.P) // Pause the game when 'P' is pressed
+            if (e.KeyCode == Keys.P)
             {
                 if (paused)
                 {
