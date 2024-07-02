@@ -23,7 +23,7 @@ namespace Shooting_Helicopter
         Random random = new Random();
         Random colorRandom = new Random();
 
-        private DifficultyForm difficultyForm; 
+        private DifficultyForm difficultyForm;
 
         public Form1()
         {
@@ -59,15 +59,15 @@ namespace Shooting_Helicopter
                 case "Medium":
                     playerSpeed = 10;
                     speed = 10;
-                    UFOSpeed = 15;
+                    UFOSpeed = 20;
                     break;
                 case "Hard":
                     playerSpeed = 15;
                     speed = 15;
-                    UFOSpeed = 20;
+                    UFOSpeed = 30;
                     break;
                 default:
-                    playerSpeed = 5; 
+                    playerSpeed = 5;
                     speed = 5;
                     UFOSpeed = 10;
                     break;
@@ -87,7 +87,7 @@ namespace Shooting_Helicopter
         {
             txtScore.Text = "Score: " + score + " Health: " + Health;
 
-            if (!paused) 
+            if (!paused)
             {
                 if (goUp && helicopter.Top > 0)
                 {
@@ -133,8 +133,15 @@ namespace Shooting_Helicopter
                         if (ufo.Bounds.IntersectsWith(x.Bounds))
                         {
                             RemoveBullet((PictureBox)x);
-                            score += 1;
-                            ChangeUFO();
+                            if (index == 1) 
+                            {
+                                index = 0; 
+                            }
+                            else
+                            {
+                                score += 1;
+                                ChangeUFO();
+                            }
                         }
                     }
                 }
@@ -170,7 +177,7 @@ namespace Shooting_Helicopter
             pillar1.Left = 600;
             pillar2.Left = 253;
 
-            GameTimer.Start();
+            StartGameWithDifficultySelection();
         }
 
         private void GameOver()
@@ -227,15 +234,48 @@ namespace Shooting_Helicopter
                 colorRandom.Next(256), colorRandom.Next(256));
         }
 
+        private void Alien3Shoot()
+        {
+            PictureBox bullet = new PictureBox
+            {
+                BackColor = Color.Red,
+                Size = new Size(10, 10),
+                Left = ufo.Left,
+                Top = ufo.Top + ufo.Height / 2,
+                Tag = "alien3bullet"
+            };
+
+            Controls.Add(bullet);
+
+            Timer bulletTimer = new Timer();
+            bulletTimer.Interval = 20;
+            bulletTimer.Tick += (sender, e) =>
+            {
+                bullet.Left -= 10;
+
+                if (bullet.Bounds.IntersectsWith(helicopter.Bounds))
+                {
+                    bulletTimer.Stop();
+                    Controls.Remove(bullet);
+                    DecreaseHealth();
+                }
+
+                if (bullet.Left < 0)
+                {
+                    bulletTimer.Stop();
+                    Controls.Remove(bullet);
+                }
+            };
+
+            bulletTimer.Start();
+        }
+
         private void ChangeUFO()
         {
+            index++;
             if (index > 3)
             {
                 index = 1;
-            }
-            else
-            {
-                index += 1;
             }
 
             switch (index)
@@ -248,11 +288,31 @@ namespace Shooting_Helicopter
                     break;
                 case 3:
                     ufo.Image = Properties.Resources.alien3;
+                    Alien3Shoot();
                     break;
             }
 
             ufo.Left = 1000;
             ufo.Top = random.Next(20, ClientSize.Height - ufo.Height);
+
+            int ufoSpeedIndex;
+            switch (difficultyForm.SelectedDifficulty)
+            {
+                case "Easy":
+                    ufoSpeedIndex = 10;
+                    break;
+                case "Medium":
+                    ufoSpeedIndex = 25;
+                    break;
+                case "Hard":
+                    ufoSpeedIndex = 40;
+                    break;
+                default:
+                    ufoSpeedIndex = 10;
+                    break;
+            }
+
+            UFOSpeed = ufoSpeedIndex;
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
