@@ -45,6 +45,7 @@
             this.easyRadioButton.TabStop = true;
             this.easyRadioButton.Text = "easy";
             this.easyRadioButton.UseVisualStyleBackColor = true;
+            this.easyRadioButton.CheckedChanged += new System.EventHandler(this.easyRadioButton_CheckedChanged);
             // 
             // mediumRadioButton
             // 
