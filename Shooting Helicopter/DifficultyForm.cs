@@ -15,14 +15,14 @@ namespace Shooting_Helicopter
 
         private void ConfirmButton_Click(object sender, EventArgs e)
         {
-            // No action needed here
+           
         }
 
         private void DifficultyForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (this.DialogResult == DialogResult.None)
             {
-                SelectedDifficulty = "Easy"; // Default to Easy if closed without selecting
+                SelectedDifficulty = "Easy"; 
             }
         }
 
@@ -42,13 +42,18 @@ namespace Shooting_Helicopter
             }
             else
             {
-                SelectedDifficulty = "Default"; // Handle default case if needed
+                SelectedDifficulty = "Default";
             }
 
             this.DialogResult = DialogResult.OK;
         }
 
         private void easyRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
         {
 
         }
