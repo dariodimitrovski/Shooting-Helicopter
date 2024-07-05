@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace Shooting_Helicopter
 {
-    public partial class Form1 : Form
+    public partial class Form1 : Form, IGameSubject
     {
         private int playerSpeed;
         private int speed;
@@ -23,12 +24,51 @@ namespace Shooting_Helicopter
         Random random = new Random();
         Random colorRandom = new Random();
 
+        private List<IGameObserver> observers = new List<IGameObserver>();
+
         private DifficultyForm difficultyForm;
+
+        private List<int> healthMilestones; 
 
         public Form1()
         {
             InitializeComponent();
+            healthMilestones = new List<int> { 5, 20, 40 }; 
             StartGameWithDifficultySelection();
+        }
+
+        public void Subscribe(IGameObserver observer)
+        {
+            observers.Add(observer);
+        }
+
+        public void Unsubscribe(IGameObserver observer)
+        {
+            observers.Remove(observer);
+        }
+
+        public void NotifyScoreUpdate(int newScore)
+        {
+            foreach (var observer in observers)
+            {
+                observer.UpdateScore(newScore);
+            }
+        }
+
+        public void NotifyHealthUpdate(int newHealth)
+        {
+            foreach (var observer in observers)
+            {
+                observer.UpdateHealth(newHealth);
+            }
+        }
+
+        public void NotifyGameOver()
+        {
+            foreach (var observer in observers)
+            {
+                observer.GameOver();
+            }
         }
 
         private void StartGameWithDifficultySelection()
@@ -77,6 +117,8 @@ namespace Shooting_Helicopter
             highScore = 0;
             index = 0;
             Health = 3;
+
+            healthMilestones = new List<int> { 5, 20, 40 };
 
             txtScore.Text = "Score: " + score + " Health: " + Health;
 
@@ -133,9 +175,9 @@ namespace Shooting_Helicopter
                         if (ufo.Bounds.IntersectsWith(x.Bounds))
                         {
                             RemoveBullet((PictureBox)x);
-                            if (index == 1) 
+                            if (index == 1)
                             {
-                                index = 0; 
+                                index = 0;
                             }
                             else
                             {
@@ -156,6 +198,15 @@ namespace Shooting_Helicopter
                     speed = 12;
                     UFOSpeed = 18;
                 }
+                if (healthMilestones.Contains(score))
+                {
+                    Health++;
+                    healthMilestones.Remove(score); 
+                    NotifyHealthUpdate(Health);
+                }
+
+                NotifyScoreUpdate(score);
+                NotifyHealthUpdate(Health);
             }
         }
 
@@ -191,6 +242,8 @@ namespace Shooting_Helicopter
                 highScore = score;
                 MessageBox.Show("New High Score: " + highScore);
             }
+
+            NotifyGameOver();
         }
 
         private void DecreaseHealth()
@@ -248,10 +301,10 @@ namespace Shooting_Helicopter
             Controls.Add(bullet);
 
             Timer bulletTimer = new Timer();
-            bulletTimer.Interval = 20;
+            bulletTimer.Interval = 25;
             bulletTimer.Tick += (sender, e) =>
             {
-                bullet.Left -= 10;
+                bullet.Left -= 15;
 
                 if (bullet.Bounds.IntersectsWith(helicopter.Bounds))
                 {
